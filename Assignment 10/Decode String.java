@@ -49,5 +49,5 @@ class Solution {
             sb.insert(0,st.pop());
         }
         return sb.toString();
-    }
+}
 }

@@ -1,33 +1,53 @@
 class Solution {
     public String decodeString(String s) {
-        Stack<String> st = new Stack<>();
-        String ans = "";
-        String temp = "";
-
-        for (int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-
-            if (Character.isDigit(ch)) {
-                temp += ch;
-            } else if (ch == '[') {
-                st.push(temp);
-                st.push(ans);
-                temp = "";
-                ans = "";
-            } else if (ch == ']') {
-                String inner = ans;
-                ans = st.pop();
-                int k = Integer.parseInt(st.pop());
-                String temp1 = "";
-                while (k-- > 0) {
-                    temp1 += inner;
+        Stack<String> st=new Stack<>();  
+        int i=0;
+        while(i<s.length()){
+            char c=s.charAt(i);
+            if (Character.isDigit(c)){
+                String temp="";
+                while (i<s.length() && Character.isDigit(s.charAt(i))){
+                    temp+=s.charAt(i);
+                    i++;
                 }
-                ans += temp1;
-            } else {
-                ans += ch;
+                st.push(temp);
+                continue;
+            } 
+            else if(c=='['){
+                st.push("[");
+                i++;
+            } 
+            else if(Character.isLetter(c)){
+                String t="";
+                while (i<s.length() && Character.isLetter(s.charAt(i))) {
+                    t+=s.charAt(i);
+                    i++;
+                }
+                st.push(t);
+                continue;
+            } 
+            else if(c ==']'){
+            String temp="";
+            while(!st.isEmpty() && !st.peek().equals("[")){
+               temp=st.pop() + temp; 
+              }
+            st.pop(); 
+            int count=Integer.parseInt(st.pop());
+            String str="";
+             for(int k=0;k<count;k++){
+                str+=temp;
+            }
+            st.push(str);
+              i++;
+            } 
+            else{
+                i++;
             }
         }
-
-        return ans;
-    }
+        StringBuilder sb=new StringBuilder();
+        while(!st.isEmpty()){
+            sb.insert(0,st.pop());
+        }
+        return sb.toString();
+    }
 }
